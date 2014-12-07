@@ -1,0 +1,47 @@
+body {
+	background: #666;
+}
+
+div.eulerProblem {
+	margin: 20px;
+	background: #d8d0d9;
+	padding: 30px;
+	border-radius: 30px;
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto
+}
+
+div.eulerProblem .problem {
+	color: #888;
+	font-weight: 800;
+	display: inline-block;
+}
+
+div.eulerProblem .title {
+	text-align: center;
+}
+
+div.eulerProblem .description {
+	padding: 20px;
+	background: #ddd;
+	border-radius: 10px;
+}
+
+div.eulerProblem .timingLabel {
+	display: inline-block;
+}
+
+div.eulerProblem .timing {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+div.eulerProblem .resultLabel {
+	display: inline-block;
+}
+
+div.eulerProblem .result {
+	display: inline-block;
+	margin-left: 10px;
+}
