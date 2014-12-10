@@ -1,17 +1,38 @@
 $(function() {
-	function eulerProblem(number, title, description, fn) {
-		var t = Date.now();
-		var res = fn();
-		var ellapsedMillis = Date.now() - t;
+	var functions = [];
 
-		var codeHtml = '<pre><code class="language-javascript">'+ fn +'</code></pre>';
-		var html = '<div class="eulerProblem">' + 
-		'<h2 class="problem">Problem '+ number + '</h2>' + 
-		'<h4 class="title">' + title + '</h4>' + '<h5 class="description">' + description + '</h5>' + codeHtml + 
-		'<h4 class="resultLabel">result: </h4><h3 class="result">' + res +'</h3><br>' +
-		'<h4 class="timingLabel">calculated in: </h4><h3 class="timing">' + ellapsedMillis +' milliseconds</h3></div>';
+	function eulerProblem(number, title, description, fn) {
+		functions.push(fn);
+		var html = '' +
+		'<div class="eulerProblem">' + 
+		'	<h2 class="problem">Problem '+ number + '</h2>' + 
+		'	<h4 class="title">' + title + '</h4>' + 
+		'	<h5 class="description">' + description + '</h5>' + 
+		'	<button>Show Solution</button>' +
+		'	<div class="solution" style="display:none">' +
+		'		<pre><code class="language-javascript">' + fn + '</code></pre>' + 
+		'		<h4 class="resultLabel">result: </h4><h3 class="result"></h3><br>' +
+		'		<h4 class="timingLabel">calculated in: </h4><h3 class="timing"></h3>' +
+		'	</div>' +
+		'</div>';
 
 		$('body').append(html);
+	}
+
+	function wireButtons() {
+		$('.eulerProblem').each(function(i, el) {
+			var $el = $(el);
+			$el.find('button').click(function (e) {
+				var t = Date.now();
+				var res = functions[i]();
+				var ellapsedMillis = Date.now() - t;
+				
+				$el.find('.result').html(res);
+				$el.find('.timing').html(ellapsedMillis + ' milliseconds');
+
+				$el.find('.solution').slideDown(500);				
+			});
+		})
 	}
 
 	eulerProblem(1, 'Multiples of 3 and 5', 
@@ -71,37 +92,37 @@ $(function() {
 		'A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99. <br> ' + 
 		'Find the largest palindrome made from the product of two 3-digit numbers.',
 		function() { 
-			// function isPalindrome(n) {
-			// 	var arr = ('' + n).split('');
-			// 	var halfLen = Math.floor(arr.length / 2);
-			// 	return _.isEqual(_.first(arr, halfLen), _.last(arr, halfLen).reverse());
-			// }
+			function isPalindrome(n) {
+				var arr = ('' + n).split('');
+				var halfLen = Math.floor(arr.length / 2);
+				return _.isEqual(_.first(arr, halfLen), _.last(arr, halfLen).reverse());
+			}
 					
-			// var largestY = 99;
-			// var largestPal = 0;
-			// for(x = 999; x > largestY; x--){
-			// 	for(y = 999; y > 99; y--){
-			// 		var test = x * y;
-			// 		if(isPalindrome(test) && y > largestY) {
-			// 			largestY = y;
-			// 			if(test > largestPal) largestPal = test;
-			// 		}
-			// 	}
-			// }			
-			// return largestPal;
+			var largestY = 99;
+			var largestPal = 0;
+			for(x = 999; x > largestY; x--){
+				for(y = 999; y > 99; y--){
+					var test = x * y;
+					if(isPalindrome(test) && y > largestY) {
+						largestY = y;
+						if(test > largestPal) largestPal = test;
+					}
+				}
+			}			
+			return largestPal;
 		});
 
 	eulerProblem(5, 'Smallest multiple', 
 		'2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder. <br> ' + 
 		'What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?',
 		function() {
-			// var n = 2520;
+			var n = 2520;
 			
-			// while(!_.reduce(_.range(11, 21), function(acc, x){ return n % x == 0 && acc }, true)) {
-			// 	n += 20;
-			// }
+			while(!_.reduce(_.range(11, 21), function(acc, x){ return n % x == 0 && acc }, true)) {
+				n += 20;
+			}
 
-			// return n;
+			return n;
 		});
 
 	eulerProblem(6, 'Smallest multiple', 
@@ -167,7 +188,20 @@ $(function() {
 		'Find the thirteen adjacent digits in the 1000-digit number that have the greatest product. What is the value of this product?',
 		
 		function() {
-			var num = 7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450;
-			
+			var num = '7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450';
+			var largestSubstr;
+			var largestProduct = 0;
+			for(var i=0; i <= num.length - 13; ++i) {
+				var subStr = num.substr(i, 13);
+				var product = _.reduce(subStr.split(''), function(a, b){ return a * b; });
+				if(product > largestProduct) {
+					largestProduct = product;
+					largestSubstr = subStr;
+				}
+			}
+
+			return largestProduct;
 		});
+
+	wireButtons();
 })
